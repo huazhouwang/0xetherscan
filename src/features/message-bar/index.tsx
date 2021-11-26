@@ -1,10 +1,10 @@
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { hideMessageBar, selectMessageBar } from "./slice";
+import { hideMessageBar, messageBarSelector } from "./slice";
 import { Alert, Snackbar } from "@mui/material";
 
 const MessageBar = () => {
-  const { status, message, severity } = useAppSelector(selectMessageBar);
   const dispatch = useAppDispatch();
+  const { status, message, severity } = useAppSelector(messageBarSelector);
 
   return (
     <Snackbar

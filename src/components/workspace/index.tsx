@@ -4,20 +4,21 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ExtIcon from "../ext-icons";
 
-type File = {
+type LeafNode = {
   id: string;
   name: string;
   ext?: string;
 };
 
-type Folder = File & {
-  children: Array<Folder | File>;
+type BranchNode = Omit<LeafNode, "ext"> & {
+  children: Array<BranchNode | LeafNode>;
 };
 
 type WorkspaceProps = {
+  id: string;
   name: string;
-  folders: Folder[];
-  onFileClick: (id: string) => void;
+  node: BranchNode;
+  onNodeTailClick: (id: string) => void;
 };
 
 const getExtName = (name: string) => {
@@ -28,47 +29,53 @@ const getExtName = (name: string) => {
   return dotIndex >= 0 ? name.slice(dotIndex) : "";
 };
 
-const RecursiveTreeNodes = ({
-  folders,
-  onFileClick,
-}: Pick<WorkspaceProps, "folders" | "onFileClick">) => (
+const RecursiveNode = ({
+  node,
+  onNodeTailClick,
+}: {
+  node: BranchNode | LeafNode;
+  onNodeTailClick: (id: string) => void;
+}) => (
   <>
-    {folders.map((folder) => (
+    {"children" in node ? (
       <TreeItem
-        key={folder.id}
-        nodeId={folder.id}
-        label={folder.name}
-        icon={folder.children.length === 0 ? <FolderOffIcon /> : undefined}
+        nodeId={node.id}
+        key={node.id}
+        label={node.name}
+        icon={node.children.length === 0 ? <FolderOffIcon /> : undefined}
       >
-        {folder.children.map((node) =>
-          "children" in node ? (
-            <RecursiveTreeNodes folders={[node]} onFileClick={onFileClick} />
-          ) : (
-            <TreeItem
-              nodeId={node.id}
-              key={node.id}
-              label={node.name}
-              onClick={() => onFileClick(node.id)}
-              icon={<ExtIcon ext={getExtName(node.name)} />}
-            />
-          )
-        )}
+        {node.children.map((i) => (
+          <RecursiveNode
+            key={i.id}
+            node={i}
+            onNodeTailClick={onNodeTailClick}
+          />
+        ))}
       </TreeItem>
-    ))}
+    ) : (
+      <TreeItem
+        nodeId={node.id}
+        key={node.id}
+        label={node.name}
+        onClick={() => onNodeTailClick(node.id)}
+        icon={<ExtIcon ext={getExtName(node.name)} />}
+      />
+    )}
   </>
 );
 
-const Workspace = ({ name, folders, onFileClick }: WorkspaceProps) => {
+const Workspace = ({ id, name, node, onNodeTailClick }: WorkspaceProps) => {
   return (
     <TreeView
+      key={id}
       aria-label={name}
       defaultCollapseIcon={<KeyboardArrowDownIcon />}
       defaultExpandIcon={<KeyboardArrowRightIcon />}
     >
-      <RecursiveTreeNodes folders={folders} onFileClick={onFileClick} />
+      <RecursiveNode node={node} onNodeTailClick={onNodeTailClick} />
     </TreeView>
   );
 };
 
 export default Workspace;
-export type { Folder };
+export type { BranchNode, LeafNode };

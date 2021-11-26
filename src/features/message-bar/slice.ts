@@ -1,41 +1,42 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../redux/store";
+import { createSliceSelector } from "../../redux/utils";
 
-type State = {
+export const NAMESPACE = "messageBar";
+
+type MessageBarState = {
   message: string;
   severity?: "error" | "warning" | "info" | "success";
   status: "close" | "open";
 };
 
-const initialState: State = {
+const initialState: MessageBarState = {
   message: "",
   severity: "info",
   status: "close",
 };
 
 const slice = createSlice({
-  name: "message-bar",
+  name: NAMESPACE,
   initialState,
   reducers: {
     show: (
       state,
-      action: PayloadAction<Pick<State, "severity" | "message">>
+      action: PayloadAction<Pick<MessageBarState, "severity" | "message">>
     ) => {
       Object.assign(state, {
         status: "open",
-        ...action.payload,
+        message: action.payload.message,
+        severity: action.payload.severity || "info",
       });
     },
     hide: (state) => {
       Object.assign(state, {
         status: "close",
-        message: "",
-        severity: "info",
       });
     },
   },
 });
 
-export default slice.reducer;
+export const reducer = slice.reducer;
 export const { show: showMessageBar, hide: hideMessageBar } = slice.actions;
-export const selectMessageBar = (state: RootState) => state.messageBar;
+export const messageBarSelector = createSliceSelector(NAMESPACE);
