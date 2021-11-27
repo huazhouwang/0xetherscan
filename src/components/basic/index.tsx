@@ -18,8 +18,8 @@ const Center = styled(Flex)({
 });
 
 const SizedBox = styled("div")<{
-  width: number | string | undefined;
-  height: number | string | undefined;
+  width?: number | string;
+  height?: number | string;
 }>(({ width, height }) => ({
   width: width,
   height: height,

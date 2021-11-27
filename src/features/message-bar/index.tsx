@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { hideMessageBar, messageBarSelector } from "./slice";
 import { Alert, Snackbar } from "@mui/material";
+import ExpandableHelperText from "../../components/expandable-helper-text";
 
 const MessageBar = () => {
   const dispatch = useAppDispatch();
@@ -14,7 +15,10 @@ const MessageBar = () => {
       onClose={() => dispatch(hideMessageBar())}
     >
       <Alert variant={"filled"} severity={severity}>
-        {message}
+        <ExpandableHelperText
+          title={severity?.toUpperCase() || ""}
+          value={message}
+        />
       </Alert>
     </Snackbar>
   );
