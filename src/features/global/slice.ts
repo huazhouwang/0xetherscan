@@ -14,9 +14,7 @@ type GlobalState = {
 };
 
 const initialState: GlobalState = {
-  apiKeys: {
-    eth: "3C8C7FRFU8EQS164FKIKEQERRT8ZDETJMW",
-  },
+  apiKeys: {},
 };
 
 const slice = createSlice({
