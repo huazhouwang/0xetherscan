@@ -5,6 +5,10 @@ import { store } from "./redux/store";
 import { Provider } from "react-redux";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 
+// const lightModeTheme = createTheme({
+//   palette: { mode: "light" },
+// });
+
 const darkModeTheme = createTheme({
   palette: { mode: "dark", background: { default: "rgb(10, 25, 41)" } },
 });

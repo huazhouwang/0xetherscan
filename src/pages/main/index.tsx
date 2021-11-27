@@ -1,7 +1,10 @@
 import SplitPane from "../../components/split-pane";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Explorer from "../../features/explorer";
 import EditorPane from "../../features/editor-pane";
+import { useParams } from "react-router-dom";
+import { fetchSourceCodeAsync } from "../../features/explorer/slice";
+import { useAppDispatch } from "../../redux/hooks";
 
 const LeftPanel = ({
   onFileSelected,
@@ -16,10 +19,24 @@ const RightPane = ({ fileIds }: { fileIds: string[] }) => {
 };
 
 const MainPage = () => {
+  const routeParams = useParams();
+  const dispatch = useAppDispatch();
   const [fileIds, setFileIds] = useState<string[]>(() => []);
 
   const onFileSelected = useCallback((id: string) => {
     setFileIds(() => [id]);
+  }, []);
+
+  useEffect(() => {
+    const { address } = routeParams || {};
+    if (address) {
+      dispatch(
+        fetchSourceCodeAsync({
+          chainId: "eth",
+          address: address,
+        })
+      );
+    }
   }, []);
 
   return (

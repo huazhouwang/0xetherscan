@@ -1,30 +1,17 @@
 import MessageBar from "./features/message-bar";
-import { Button } from "@mui/material";
-import { useAppDispatch } from "./redux/hooks";
-import { showMessageBar } from "./features/message-bar/slice";
-
-const Demo = () => {
-  const dispatch = useAppDispatch();
-  return (
-    <Button
-      onClick={() =>
-        dispatch(
-          showMessageBar({
-            message: "time now: " + Date.now(),
-            severity: "error",
-          })
-        )
-      }
-    >
-      Time Now
-    </Button>
-  );
-};
+import MainPage from "./pages/main";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 const App = () => {
+  console.log(window.location.href);
   return (
     <>
-      <Demo />
+      <BrowserRouter>
+        <Routes>
+          <Route path={"/"} element={<MainPage />} />
+          <Route path={"/address/:address"} element={<MainPage />} />
+        </Routes>
+      </BrowserRouter>
       <MessageBar />
     </>
   );
