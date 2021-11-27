@@ -1,4 +1,5 @@
 import { ChainID } from "../global/slice";
+import { delayPromise } from "../../utils/promise-plus";
 
 const API_HOST: Record<ChainID, string> = {
   eth: "https://api.etherscan.io/api",
@@ -58,8 +59,15 @@ const fetchFromEtherscan = async (
     Number(realItem.Proxy) === 1 &&
     realItem.Implementation &&
     realItem.Implementation.toLowerCase() !== address.toLowerCase();
+
+  const wrapper: <T>(func: () => Promise<T>) => Promise<T> = apikey
+    ? (f) => f()
+    : (f) => delayPromise(5000).then(f);
+
   const implementation = proxy
-    ? await fetchFromEtherscan(apiHost, realItem.Implementation, apikey)
+    ? await wrapper(() =>
+        fetchFromEtherscan(apiHost, realItem.Implementation, apikey)
+      )
     : undefined;
 
   const source = normalize(realItem.SourceCode);
