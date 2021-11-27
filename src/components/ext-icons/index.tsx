@@ -41,9 +41,9 @@ const FallbackIcon = () => <ArticleIcon />;
 
 const ICON_RECORDS: Record<string, () => JSX.Element> = {
   fallback: FallbackIcon,
-  ".sol": SolidityExtIcon,
-  ".json": JsonExtIcon,
-  ".py": PythonExtIcon,
+  sol: SolidityExtIcon,
+  json: JsonExtIcon,
+  py: PythonExtIcon,
 };
 
 const ExtIcon = ({ ext }: { ext: string }) => {

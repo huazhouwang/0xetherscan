@@ -1,6 +1,7 @@
 import { Project } from "./slice";
 import { useMemo } from "react";
 import { BranchNode, LeafNode } from "../../components/workspace";
+import { getFileExt } from "./utils";
 
 const customNameCompare = (a: string, b: string): number => {
   const ab = [a, b];
@@ -26,6 +27,7 @@ const customNameCompare = (a: string, b: string): number => {
 const asNode = (project: Project): BranchNode => {
   type TempNode = Omit<BranchNode, "children"> & {
     children?: Record<string, TempNode>;
+    ext?: string;
   };
 
   const tempRoot: TempNode = {
@@ -56,8 +58,14 @@ const asNode = (project: Project): BranchNode => {
     if (!final.children) {
       throw new Error("Illegal state");
     }
+
     const filName = splits[splits.length - 1];
-    final.children[filName] = { id: `${final.id}/${filName}`, name: filName };
+    const ext = getFileExt(filName);
+    final.children[filName] = {
+      id: `${final.id}/${filName}`,
+      name: filName,
+      ext,
+    };
 
     return root;
   }, tempRoot);
@@ -73,6 +81,8 @@ const asNode = (project: Project): BranchNode => {
       branchNode.children = Object.values(node.children)
         .map(convert)
         .sort((a, b) => customNameCompare(a.name, b.name));
+    } else {
+      newNode.ext = node.ext;
     }
 
     return newNode;

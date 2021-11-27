@@ -23,7 +23,11 @@ const ProjectHolder = ({
   );
 };
 
-const Explorer = () => {
+type ExplorerProps = {
+  onFileSelected: (fileId: string) => void;
+};
+
+const Explorer = ({ onFileSelected }: ExplorerProps) => {
   const dispatch = useAppDispatch();
   const allProjects = useAppSelector(allProjectsSelector);
 
@@ -52,17 +56,13 @@ const Explorer = () => {
       );
   }, []);
 
-  const onNodeTailClick = (id: string) => {
-    console.log("click: ", id);
-  };
-
   return (
     <Column>
       {allProjects.map((project) => (
         <ProjectHolder
           key={project.id}
           project={project}
-          onNodeTailClick={onNodeTailClick}
+          onNodeTailClick={onFileSelected}
         />
       ))}
     </Column>

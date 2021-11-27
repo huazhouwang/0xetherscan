@@ -21,14 +21,6 @@ type WorkspaceProps = {
   onNodeTailClick: (id: string) => void;
 };
 
-const getExtName = (name: string) => {
-  const dotIndex = name.lastIndexOf(".");
-  if (dotIndex < 0) {
-    return "";
-  }
-  return dotIndex >= 0 ? name.slice(dotIndex) : "";
-};
-
 const RecursiveNode = ({
   node,
   onNodeTailClick,
@@ -58,7 +50,7 @@ const RecursiveNode = ({
         key={node.id}
         label={node.name}
         onClick={() => onNodeTailClick(node.id)}
-        icon={<ExtIcon ext={getExtName(node.name)} />}
+        icon={<ExtIcon ext={node.ext || ""} />}
       />
     )}
   </>

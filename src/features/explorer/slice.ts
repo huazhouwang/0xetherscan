@@ -8,6 +8,7 @@ import {
 import { createSliceSelector } from "../../redux/utils";
 import { apiKeySelector } from "../global/slice";
 import { RootState } from "../../redux/store";
+import { getFileExt } from "./utils";
 
 export const NAMESPACE = "explorer";
 
@@ -77,6 +78,9 @@ const slice = createSlice({
         createdAt: Date.now(),
       });
     });
+    // .addCase(fetchSourceCodeAsync.rejected, (state, action) => {
+    //   return;
+    // });
   },
 });
 
@@ -100,12 +104,39 @@ export const allProjectsSelector = createSelector(
   entitySelectors.selectAll
 );
 
-export const getSpecificFileContent = createSelector(
+export type FileDetail = {
+  id: string;
+  projectId: string;
+  filePath: string;
+  content: string;
+  ext: string;
+};
+
+export const getSpecificFileContentSelector = createSelector(
+  [sliceSelector, (state: RootState, fileId: string) => fileId],
+  (state, fileId) => {
+    const firstSlashIndex = fileId.indexOf("/");
+    const [projectId, filePath] = [
+      fileId.slice(0, firstSlashIndex),
+      fileId.slice(firstSlashIndex + 1),
+    ];
+    const content = getContentFromLocalStorage(projectId, filePath) || "";
+
+    return {
+      id: fileId,
+      projectId,
+      filePath,
+      content,
+      ext: getFileExt(filePath),
+    } as FileDetail;
+  }
+);
+
+export const getFilesSelector = createSelector(
   [
-    sliceSelector,
-    (state: RootState, payload: { projectId: string; filePath: string }) =>
-      payload,
+    (state: RootState) => state,
+    (state: RootState, fileIds: string[]) => fileIds,
   ],
-  (state, { projectId, filePath }) =>
-    getContentFromLocalStorage(projectId, filePath) || ""
+  (state, fileIds) =>
+    fileIds.map((id) => getSpecificFileContentSelector(state, id))
 );
