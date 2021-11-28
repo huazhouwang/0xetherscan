@@ -12,6 +12,7 @@ const App = () => {
           <Routes>
             <Route path={"/"} element={<MainPage />} />
             <Route path={"/address/:address"} element={<MainPage />} />
+            <Route path={"/token/:address"} element={<MainPage />} />
           </Routes>
         </BrowserRouter>
         <MessageBar />
