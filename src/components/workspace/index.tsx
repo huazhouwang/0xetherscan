@@ -3,6 +3,9 @@ import FolderOffIcon from "@mui/icons-material/FolderOff";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ExtIcon from "../ext-icons";
+import { ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
+import { useState } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 type LeafNode = {
   id: string;
@@ -14,11 +17,12 @@ type BranchNode = Omit<LeafNode, "ext"> & {
   children: Array<BranchNode | LeafNode>;
 };
 
-type WorkspaceProps = {
+export type WorkspaceProps = {
   id: string;
   name: string;
   node: BranchNode;
   onNodeTailClick: (id: string) => void;
+  onProjectDeleteClick: () => void;
 };
 
 const StyledTreeItem = (props: TreeItemProps) => (
@@ -66,22 +70,51 @@ const RecursiveNode = ({
   </>
 );
 
-const Workspace = ({ id, name, node, onNodeTailClick }: WorkspaceProps) => {
+const Workspace = ({
+  id,
+  name,
+  node,
+  onNodeTailClick,
+  onProjectDeleteClick,
+}: WorkspaceProps) => {
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+  const [openMenu, setOpenMenu] = useState<boolean>(false);
+
   return (
-    <TreeView
-      disableSelection
-      key={id}
-      aria-label={name}
-      defaultCollapseIcon={<KeyboardArrowDownIcon />}
-      defaultExpandIcon={<KeyboardArrowRightIcon />}
-      sx={{
-        flexGrow: 1,
-        overflowY: "auto",
-        overflowX: "clip",
-      }}
-    >
-      <RecursiveNode node={node} onNodeTailClick={onNodeTailClick} />
-    </TreeView>
+    <>
+      <TreeView
+        ref={setMenuAnchorEl}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          setOpenMenu(true);
+        }}
+        disableSelection
+        key={id}
+        aria-label={name}
+        defaultCollapseIcon={<KeyboardArrowDownIcon />}
+        defaultExpandIcon={<KeyboardArrowRightIcon />}
+        sx={{
+          flexGrow: 1,
+          overflowY: "auto",
+          overflowX: "clip",
+        }}
+      >
+        <RecursiveNode node={node} onNodeTailClick={onNodeTailClick} />
+      </TreeView>
+      <Menu
+        open={openMenu}
+        onClose={() => setOpenMenu(false)}
+        anchorEl={menuAnchorEl}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <MenuItem onClick={onProjectDeleteClick}>
+          <ListItemIcon>
+            <DeleteIcon sx={{ color: "inherit" }} />
+          </ListItemIcon>
+          <ListItemText>Delete</ListItemText>
+        </MenuItem>
+      </Menu>
+    </>
   );
 };
 
