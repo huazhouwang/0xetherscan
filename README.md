@@ -15,7 +15,7 @@ Just add `0x` at the begin of `etherscan.io` and press `Enter` in the browser ad
 
 ## Screenshot
 
-![](https://user-images.githubusercontent.com/9532423/143733209-a5933dfc-8df1-4556-93f8-c1604bc68059.png)
+![](https://user-images.githubusercontent.com/9532423/143735529-9dbeaf04-2112-48bc-9383-d5900c2c76fe.gif)
 
 ## Build yourself
 
@@ -33,5 +33,6 @@ yarn build
 
 ## Donate
 
-0x82382336987CcaC22fb2f41915C0Fc2197B8651B <br/>
 ![](https://user-images.githubusercontent.com/9532423/143733890-fa342e39-5dd2-46cc-8f2b-e29d58aebf19.png)
+<br/>
+**0x82382336987CcaC22fb2f41915C0Fc2197B8651B**
