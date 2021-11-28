@@ -40,7 +40,6 @@ export const fetchSourceCodeAsync = createAsyncThunk(
     return { chainId, source };
   },
   {
-    dispatchConditionRejection: true,
     condition: ({ chainId, address }, { getState }) => {
       const projectId = generateId(chainId, address);
       const project = entity

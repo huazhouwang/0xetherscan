@@ -1,5 +1,5 @@
 import { MobileView } from "react-device-detect";
-import { Center, Column } from "../basic";
+import { Center } from "../basic";
 import SolidityLogo from "../../assets/solidity_logo_256.png";
 import { Link, Typography } from "@mui/material";
 
@@ -16,7 +16,10 @@ const MobileNotSupported = () => {
         <Typography align={"center"}>
           Please visit on PC, <br />
           or follow the{" "}
-          <Link href={"https://github.com/huazhouwang/0xetherscan"}>
+          <Link
+            target={"_blank"}
+            href={"https://github.com/huazhouwang/0xetherscan"}
+          >
             project
           </Link>{" "}
           for more detail

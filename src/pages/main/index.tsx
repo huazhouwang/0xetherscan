@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { fetchSourceCodeAsync } from "../../features/explorer/slice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import ImportDialog from "../../components/import-dialog";
-import { AppBar, Toolbar, Typography, Box } from "@mui/material";
+import AppBar from "../../components/app-bar";
 import {
   ALL_CHAIN_CONFIG,
   allApiKeysSelector,
@@ -15,18 +15,7 @@ import {
   updateApiKeyAction,
 } from "../../features/global/slice";
 import { Column, SizedBox } from "../../components/basic";
-
-const MyAppBar = () => {
-  return (
-    <AppBar position={"absolute"}>
-      <Toolbar>
-        <Typography variant={"h6"} color={"inherit"} noWrap>
-          0xetherscan
-        </Typography>
-      </Toolbar>
-    </AppBar>
-  );
-};
+import { Box } from "@mui/material";
 
 const LeftPanel = ({
   onFileSelected,
@@ -55,7 +44,7 @@ const MainPage = () => {
   return (
     <>
       <Column>
-        <MyAppBar />
+        <AppBar />
         <SizedBox height={64} />
 
         <Box>
