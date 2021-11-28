@@ -1,5 +1,6 @@
 import {
   createDraftSafeSelector,
+  createSelector,
   createSlice,
   PayloadAction,
 } from "@reduxjs/toolkit";
@@ -7,7 +8,12 @@ import { createSliceSelector } from "../../redux/utils";
 import { RootState } from "../../redux/store";
 
 export const NAMESPACE = "global";
-export type ChainID = "eth" | "bsc";
+
+export const ALL_CHAIN_CONFIG: Record<string, { icon?: string }> = {
+  eth: {},
+  bsc: {},
+};
+export type ChainID = keyof typeof ALL_CHAIN_CONFIG;
 
 type GlobalState = {
   apiKeys: Record<string, string | undefined>;
@@ -21,7 +27,7 @@ const slice = createSlice({
   name: NAMESPACE,
   initialState,
   reducers: {
-    configApiKey: (
+    updateApiKey: (
       state,
       action: PayloadAction<{ chainId: ChainID; apiKey: string }>
     ) => {
@@ -42,11 +48,15 @@ const slice = createSlice({
 
 export const reducer = slice.reducer;
 export const {
-  configApiKey: configApiKeyAction,
+  updateApiKey: updateApiKeyAction,
   deleteApiKey: deleteApiKeyAction,
 } = slice.actions;
 
 const sliceSelector = createSliceSelector(NAMESPACE);
+export const allApiKeysSelector = createSelector(
+  sliceSelector,
+  (state) => state.apiKeys
+);
 export const apiKeySelector = createDraftSafeSelector(
   [sliceSelector, (state: RootState, chainId: ChainID) => chainId],
   (state, chainId) => state.apiKeys[chainId]

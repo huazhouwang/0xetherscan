@@ -33,13 +33,14 @@ export const fetchSourceCodeAsync = createAsyncThunk(
   `${NAMESPACE}/fetchSourceCodeAsync`,
   async (
     { chainId, address }: { chainId: ChainID; address: string },
-    thunkApi
+    { getState }
   ) => {
-    const apiKey = apiKeySelector(thunkApi.getState() as RootState, chainId);
+    const apiKey = apiKeySelector(getState() as RootState, chainId);
     const source = await realFetchSourceCode(chainId, address, apiKey);
     return { chainId, source };
   },
   {
+    dispatchConditionRejection: true,
     condition: ({ chainId, address }, { getState }) => {
       const projectId = generateId(chainId, address);
       const project = entity
@@ -78,9 +79,6 @@ const slice = createSlice({
         createdAt: Date.now(),
       });
     });
-    // .addCase(fetchSourceCodeAsync.rejected, (state, action) => {
-    //   return;
-    // });
   },
 });
 
@@ -98,6 +96,17 @@ export const { removeProjectById } = slice.actions;
 
 const sliceSelector = createSliceSelector(NAMESPACE);
 const entitySelectors = entity.getSelectors();
+
+export const isProjectExistSelector = createSelector(
+  [
+    sliceSelector,
+    (state: RootState, payload: { chainId: ChainID; address: string }) =>
+      payload,
+  ],
+  (state, { chainId, address }) =>
+    entitySelectors.selectById(state, generateId(chainId, address)) !==
+    undefined
+);
 
 export const allProjectsSelector = createSelector(
   sliceSelector,
