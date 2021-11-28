@@ -67,6 +67,13 @@ const fetchFromEtherscan = async (
       )
     : undefined;
 
+  if (
+    typeof realItem.SourceCode !== "string" ||
+    realItem.SourceCode.length <= 0
+  ) {
+    throw new Error(`Source code not found. address: ${address}`);
+  }
+
   const source = normalize(realItem.SourceCode);
   let files: Record<string, string>;
   if (typeof source === "string") {
