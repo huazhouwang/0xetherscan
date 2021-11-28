@@ -27,9 +27,6 @@ const fetchFromEtherscan = async (
   const url = `${apiHost}?${new URLSearchParams(params).toString()}`;
   const resp = await fetch(url, {
     mode: "cors",
-    headers: {
-      "User-Agent": "0xetherscan",
-    },
   });
 
   if (!resp.ok) {

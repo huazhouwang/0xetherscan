@@ -9,7 +9,6 @@ Inspired by [github1s](https://github.com/conwnet/github1s).
 ## Usage
 
 Just add `0x` at the begin of `etherscan.io` and press `Enter` in the browser address bar for any contract if it is open source already. Like this [UniswapV3 Router](https://0xetherscan.io/address/0xe592427a0aece92de3edee1f18e0157c05861564) <br/>
-**Mobile is not supported yet**
 
 > Remind:<br/>
 > For now, metamask will warning that 0xetherscan.io is a phishing domain. I have submitted an [issue](https://github.com/MetaMask/eth-phishing-detect/issues/6023) to them, you can pass by click `continuing at your own risk`, and it will never show again
